@@ -21,7 +21,10 @@ public class Club {
     private String introduction;
     @Column(name = "HISTORY", nullable = false)
     private String history;
-    @Column(name = "HISTORY", nullable = false)
+    @Column(name = "PROFESSOR_NAME", nullable = false)
+    private String professorName;
+    @Column(name = "PROFESSOR_DEPARTMENT", nullable = false)
     private String professorDepartment;
+    @Column(name = "PROFESSOR_PHONENUMBER", nullable = false)
     private String professorPhoneNumber;
 }
