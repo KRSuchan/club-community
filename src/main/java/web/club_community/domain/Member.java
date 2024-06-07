@@ -27,7 +27,7 @@ public class Member {
      * PHONE_NUMBER : 전화번호
      */
     @Id
-    @Column(name = "ID")
+    @Column(name = "EMAIL")
     private String email;
     @Column(name = "PASSWORD", nullable = false)
     private String password;
@@ -48,4 +48,6 @@ public class Member {
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
     private List<String> roles = new ArrayList<>();
+    @OneToMany(mappedBy = "clubMember", cascade = CascadeType.ALL)
+    private List<ClubMember> clubMembers = new ArrayList<>();
 }
