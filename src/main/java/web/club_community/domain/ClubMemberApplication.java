@@ -24,7 +24,8 @@ public class ClubMemberApplication {
     @Column(name = "STATUS", nullable = false)
     private ApplyStatus status;
     @Column(name = "CREATE_TIME", nullable = false)
-    private LocalDateTime createTime;
+    private LocalDateTime createdDate = LocalDateTime.now();
+
     // 가입 신청서 업로드
     @Column(name = "FILE_PATH")
     private String filePath;

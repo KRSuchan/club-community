@@ -23,13 +23,14 @@ public class NoticePost {
     private String contents;
     @Column(name = "NOTICE_TYPE", nullable = false)
     private NoticeType noticeType;
+
     @Column(name = "CREATE_TIME", nullable = false)
-    private LocalDateTime createTime;
+    private LocalDateTime createdDate = LocalDateTime.now();
     @Column(name = "UPDATE_TIME", nullable = false)
-    private LocalDateTime updateTime;
-    
+    private LocalDateTime updateTime = LocalDateTime.now();
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MANAGER_USER_ID", nullable = false)
+    @JoinColumn(name = "CLUB_ID", nullable = false)
     private Club club;
 
 

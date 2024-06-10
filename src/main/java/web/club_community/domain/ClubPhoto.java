@@ -25,9 +25,9 @@ public class ClubPhoto {
     private String title;
 
     @Column(name = "CREATE_TIME", nullable = false)
-    private LocalDateTime createTime;
+    private LocalDateTime createdDate = LocalDateTime.now();
     @Column(name = "UPDATE_TIME", nullable = false)
-    private LocalDateTime updateTime;
+    private LocalDateTime updateTime = LocalDateTime.now();
 
     // 파일 관리
     @Column(name = "FILE_PATH")

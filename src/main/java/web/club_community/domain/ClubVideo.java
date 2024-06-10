@@ -23,11 +23,11 @@ public class ClubVideo {
 
     @Column(name = "TITLE", nullable = false)
     private String title;
-    
+
     @Column(name = "CREATE_TIME", nullable = false)
-    private LocalDateTime createTime;
+    private LocalDateTime createdDate = LocalDateTime.now();
     @Column(name = "UPDATE_TIME", nullable = false)
-    private LocalDateTime updateTime;
+    private LocalDateTime updateTime = LocalDateTime.now();
 
     @Column(name = "URL", nullable = false)
     private String url;

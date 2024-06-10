@@ -37,10 +37,10 @@ public class Club {
 
     // 마스터 관리자
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Master", nullable = false)
+    @JoinColumn(name = "MASTER", nullable = false)
     private Member master;
 
     // 동아리 부원
-    @OneToMany(mappedBy = "clubMember", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
     private List<ClubMember> clubMembers = new ArrayList<>();
 }
