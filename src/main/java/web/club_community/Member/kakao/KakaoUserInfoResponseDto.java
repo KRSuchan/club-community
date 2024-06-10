@@ -1,4 +1,4 @@
-package web.club_community.kakao;
+package web.club_community.Member.kakao;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -15,7 +15,7 @@ public class KakaoUserInfoResponseDto {
     //회원 번호
     @JsonProperty("id")
     public Long id;
-    
+
     //서비스에 연결 완료된 시각. UTC
     @JsonProperty("connected_at")
     public Date connectedAt;

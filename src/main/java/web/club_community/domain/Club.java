@@ -28,7 +28,8 @@ public class Club {
     private String meetingTime;
     @Column(name = "CLUB_TYPE")
     private ClubType clubType;
-
+    @Embedded
+    private Professor professor;
     // 대표 사진
     @Column(name = "FILE_PATH")
     private String filePath;
@@ -43,4 +44,5 @@ public class Club {
     // 동아리 부원
     @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
     private List<ClubMember> clubMembers = new ArrayList<>();
+
 }

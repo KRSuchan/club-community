@@ -1,4 +1,4 @@
-package web.club_community.kakao;
+package web.club_community.Member;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -6,17 +6,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import web.club_community.Member.kakao.KakaoService;
+import web.club_community.Member.kakao.KakaoUserInfoResponseDto;
 
 @RequiredArgsConstructor
 @RestController("")
 public class LoginController {
     private final KakaoService kakaoService;
 
-    @Value("${kakao.api_key}")
-    private String client_id;
-
-    @Value("${kakao.redirect_uri}")
-    private String redirect_uri;
+    @Value("${kakao.api_uri}")
+    private String api_uri;
 
     @GetMapping("/api/callback")
     public ResponseEntity<KakaoUserInfoResponseDto> callback(@RequestParam("code") String code) {
@@ -25,8 +24,8 @@ public class LoginController {
         return ResponseEntity.ok(userInfo);
     }
 
-    @GetMapping("/api/kakao")
-    public ResponseEntity<?> getOauth() {
-        return ResponseEntity.ok("https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=" + client_id + "&redirect_uri=" + redirect_uri);
+    @GetMapping("/api/login/kakao-uri")
+    public ResponseEntity<?> getOAuth() {
+        return ResponseEntity.ok(api_uri);
     }
 }

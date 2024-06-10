@@ -11,6 +11,6 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new LoginCheckInterceptor())
                 .order(1)
                 .addPathPatterns("/*")
-                .excludePathPatterns("/css/**", ".ico", "error", "/login", "/api/callback", "/api/kakao");
+                .excludePathPatterns("/css/**", ".ico", "error", "/api/callback", "/api/login/kakao-uri");
     }
 }

@@ -1,4 +1,4 @@
-package web.club_community.kakao;
+package web.club_community.Member.kakao;
 
 import io.netty.handler.codec.http.HttpHeaderValues;
 import lombok.extern.slf4j.Slf4j;

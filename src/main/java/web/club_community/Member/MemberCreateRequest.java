@@ -25,5 +25,5 @@ public class MemberCreateRequest {
     @NotNull
     private Integer code;
     @NotNull
-    private Integer phoneNumber;
+    private String phoneNumber;
 }

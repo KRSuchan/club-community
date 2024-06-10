@@ -42,22 +42,16 @@ public class Member {
     @Column(name = "CODE", nullable = false, unique = true)
     private Integer code;
     @Column(name = "PHONE_NUMBER", nullable = false)
-    private Integer phoneNumber;
-    
+    private String phoneNumber;
+
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
     private List<String> roles = new ArrayList<>();
+
+    @OneToOne(mappedBy = "master", cascade = CascadeType.ALL)
+    private Club club;
+
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<ClubMember> clubMembers = new ArrayList<>();
 
-    @Builder
-    public Member(String email, String password, String name, Gender gender, String department, Integer code, Integer phoneNumber) {
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.gender = gender;
-        this.department = department;
-        this.code = code;
-        this.phoneNumber = phoneNumber;
-    }
 }
