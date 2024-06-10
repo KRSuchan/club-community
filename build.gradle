@@ -32,9 +32,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     // validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    //Webflux
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
     // lombok
     compileOnly 'org.projectlombok:lombok'
-    implementation 'jakarta.servlet:jakarta.servlet-api:5.0.0'
     // gson (json 관련)
     implementation 'com.google.code.gson:gson:2.8.9'
     // h2 db

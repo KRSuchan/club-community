@@ -10,7 +10,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoginCheckInterceptor())
                 .order(1)
-                .addPathPatterns("/**")
-                .excludePathPatterns("/css/**", ".ico", "error", "/login");
+                .addPathPatterns("/*")
+                .excludePathPatterns("/css/**", ".ico", "error", "/login", "/api/callback", "/api/kakao");
     }
 }

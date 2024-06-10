@@ -18,6 +18,9 @@ public class SecurityConfig {
         http.authorizeHttpRequests((authorizeRequests) ->
                         authorizeRequests
                                 .requestMatchers("/api/member/signup").permitAll()
+                                .requestMatchers("/api/login").permitAll()
+                                .requestMatchers("/api/callback").permitAll()
+                                .requestMatchers("/api/kakao").permitAll()
                                 .requestMatchers("/api/public").permitAll()
                                 .requestMatchers("/api/club").hasAnyRole("member", "admin")
                                 .requestMatchers("/api/admin").hasRole("admin")
