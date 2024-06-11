@@ -1,4 +1,4 @@
-package web.club_community.Member;
+package web.club_community.Member.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-public class MemberCreateRequest {
+public class MemberSignupRequest {
     @NotNull
     private String email;
     @NotNull
@@ -17,7 +17,7 @@ public class MemberCreateRequest {
     @NotNull
     private String name;
     @NotNull
-    private LocalDate birthday;
+    private LocalDate birth;
     @NotNull
     private Gender gender;
     @NotNull

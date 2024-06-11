@@ -1,18 +1,22 @@
 package web.club_community.Member;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import web.club_community.Member.dto.request.MemberLoginRequest;
+import web.club_community.Member.dto.request.MemberSignupRequest;
 import web.club_community.domain.Member;
 import web.club_community.exception.runtime.DuplicateEmailException;
 
+import java.util.List;
+
 @Service
 @Transactional
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class MemberService implements UserDetailsService {
     private final MemberRepository memberRepository;
 
@@ -21,7 +25,7 @@ public class MemberService implements UserDetailsService {
         return memberRepository.findById(username)
                 .map(this::createUserDetails)
                 .orElseThrow(() ->
-                        new UsernameNotFoundException(username + ": 해당하는 회원이 조회되지 않습니다.")
+                        new UsernameNotFoundException("입력된 정보가 잘못 되었습니다.")
                 );
     }
 
@@ -29,10 +33,11 @@ public class MemberService implements UserDetailsService {
         return User.builder()
                 .username(member.getEmail())
                 .password(member.getPassword())
+                .roles(String.valueOf(member.getRoles()))
                 .build();
     }
 
-    public Member signupMember(MemberCreateRequest request) {
+    public Member signupMember(MemberSignupRequest request) {
         if (memberRepository.findById(request.getEmail()).isPresent()) {
             throw new DuplicateEmailException("이미 존재하는 이메일 입니다.");
         }
@@ -41,12 +46,21 @@ public class MemberService implements UserDetailsService {
                 .email(request.getEmail())
                 .password(request.getPassword())
                 .name(request.getName())
-                .birthday(request.getBirthday())
+                .birth(request.getBirth())
                 .gender(request.getGender())
                 .department(request.getDepartment())
                 .code(request.getCode())
                 .phoneNumber(request.getPhoneNumber())
+                .roles(List.of("member"))
                 .build();
         return memberRepository.save(member);
+    }
+
+    public UserDetails loginMember(MemberLoginRequest request) {
+        UserDetails user = loadUserByUsername(request.getEmail());
+        if (!user.getPassword().equals(request.getPassword())) {
+            throw new IllegalArgumentException("입력된 정보가 잘못 되었습니다.");
+        }
+        return user;
     }
 }

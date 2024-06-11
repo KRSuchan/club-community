@@ -10,8 +10,12 @@ import web.club_community.Member.MemberRepository;
 import web.club_community.club.ClubRepository;
 import web.club_community.club.member.ClubMemberRepository;
 import web.club_community.domain.*;
+import web.club_community.domain.notice.ClubNotice;
+import web.club_community.domain.notice.PublicNotice;
+import web.club_community.post.notice.NoticeRepository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,27 +38,64 @@ public class InitData {
         private final MemberRepository memberRepository;
         private final ClubMemberRepository clubMemberRepository;
         private final ClubRepository clubRepository;
+        private final NoticeRepository noticeRepository;
         private List<Member> masters = new ArrayList<>();
         private List<Member> members = new ArrayList<>();
         private List<Club> centralClubs = new ArrayList<>();
         private List<Club> departmentClubs = new ArrayList<>();
 
         public void init() {
+            // 총 회원 71명 : 시스템 관리자 1명, 클럽장 10명, 클럽원 50명, 일반회원 10명
             initMember();
+            // 총 클럽 10개 : 중앙 클럽 5개, 학과 클럽 5개
             initClub();
             initClubMember();
+            // 총 공지 110개 : 전체 공지 10개 중앙 클럽 공지 10*5개, 학과 클럽 공지 10*5개
+            initNotice();
         }
 
-        private void initNoticePost() {
+        private void initNotice() {
+            // 전체 공지 10개 생성
+            for (int i = 1; i <= 10; i++) {
+                initPublicNotice("전체 공지 예시 " + i + "번 제목입니다!!", "전체 공지 예시" + i + "번 내용입니다!!", i);
+            }
+            // 중앙 공지 10 * 5개 생성
+            for (int i = 1; i <= centralClubs.size(); i++) {
+                Club clubIdx = centralClubs.get(i - 1);
+                for (int j = 0; j < 10; j++) {
+                    initDepartmentNotice(clubIdx.getName() + " 공지 예시 " + j + "번 제목입니다!!", clubIdx.getName() + " 공지 예시" + j + "번 내용입니다!!", clubIdx, i + j);
+                }
+            }
+            // 학과 공지 10 * 5개 생성
+            for (int i = 1; i <= departmentClubs.size(); i++) {
+                Club clubIdx = departmentClubs.get(i - 1);
+                for (int j = 0; j < 10; j++) {
+                    initDepartmentNotice(clubIdx.getName() + " 공지 예시 " + j + "번 제목입니다!!", clubIdx.getName() + " 공지 예시" + j + "번 내용입니다!!", clubIdx, i + j);
+                }
+            }
         }
 
-        /**
-         * private String title;
-         * private String contents;
-         * private NoticeType noticeType;
-         */
-        private void initNoticePost(Club club, String title, String contents, NoticeType noticeType) {
-            Notice noticePost = Notice.builder().build();
+        private void initDepartmentNotice(String title, String contents, Club club, int idx) {
+            LocalDateTime now = LocalDateTime.now().minusDays(idx).minusHours(idx);
+            ClubNotice notice = ClubNotice.builder()
+                    .title(title)
+                    .contents(contents)
+                    .club(club)
+                    .createdDate(now)
+                    .updatedTime(now)
+                    .build();
+            noticeRepository.save(notice);
+        }
+
+        private void initPublicNotice(String title, String contents, int idx) {
+            LocalDateTime now = LocalDateTime.now().minusDays(idx).minusHours(idx);
+            PublicNotice notice = PublicNotice.builder()
+                    .title(title)
+                    .contents(contents)
+                    .createdDate(now)
+                    .updatedTime(now)
+                    .build();
+            noticeRepository.save(notice);
         }
 
         private void initClubMember() {
@@ -264,7 +305,7 @@ public class InitData {
             Member member = Member.builder()
                     .email(email)
                     .password(password)
-                    .birthday(birth)
+                    .birth(birth)
                     .name(name)
                     .gender(gender)
                     .department(department)

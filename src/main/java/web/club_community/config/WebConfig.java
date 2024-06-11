@@ -8,9 +8,30 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoginCheckInterceptor())
+        registry.addInterceptor(new LogInterceptor())
                 .order(1)
                 .addPathPatterns("/*")
-                .excludePathPatterns("/css/**", ".ico", "error", "/api/callback", "/api/login/kakao-uri");
+                .excludePathPatterns(
+                        "/css/**",
+                        ".ico",
+                        "error",
+                        "/api/callback",
+                        "/api/login/kakao-uri",
+                        "/member/signup",
+                        "/member/login"
+                );
+        registry.addInterceptor(new LoginCheckInterceptor())
+                .order(2)
+                .addPathPatterns("/**")
+                .excludePathPatterns(
+                        "/",
+                        "/css/**",
+                        "/*.ico",
+                        "/error",
+                        "/api/callback",
+                        "/api/login/kakao-uri",
+                        "/api/member/signup",
+                        "/api/member/login"
+                );
     }
 }

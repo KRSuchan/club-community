@@ -20,6 +20,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorizeRequests) ->
                         authorizeRequests
                                 .requestMatchers("/api/member/signup").permitAll()
+                                .requestMatchers("/api/member/login").permitAll()
                                 .requestMatchers("/api/callback").permitAll()
                                 .requestMatchers("/api/login/kakao-uri").permitAll()
                                 .requestMatchers("/api/public/**").hasRole("member")

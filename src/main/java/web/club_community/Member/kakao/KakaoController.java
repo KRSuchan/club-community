@@ -1,4 +1,4 @@
-package web.club_community.Member;
+package web.club_community.Member.kakao;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -6,12 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import web.club_community.Member.kakao.KakaoService;
-import web.club_community.Member.kakao.KakaoUserInfoResponseDto;
 
 @RequiredArgsConstructor
 @RestController("")
-public class LoginController {
+public class KakaoController {
     private final KakaoService kakaoService;
 
     @Value("${kakao.api_uri}")

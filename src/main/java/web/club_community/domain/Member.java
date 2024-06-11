@@ -34,7 +34,7 @@ public class Member {
     @Column(name = "NAME", nullable = false)
     private String name;
     @Column(name = "BIRTHDAY", nullable = false)
-    private LocalDate birthday;
+    private LocalDate birth;
     @Column(name = "GENDER", nullable = false)
     private Gender gender;
     @Column(name = "DEPARTMENT", nullable = false)
