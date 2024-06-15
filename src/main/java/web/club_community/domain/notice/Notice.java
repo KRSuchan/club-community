@@ -1,5 +1,6 @@
 package web.club_community.domain.notice;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,8 +30,10 @@ public abstract class Notice {
     private String contents;
 
     @Column(name = "CREATE_TIME", nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdDate = LocalDateTime.now();
 
     @Column(name = "UPDATE_TIME", nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updatedTime = LocalDateTime.now();
 }

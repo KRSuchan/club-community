@@ -13,6 +13,7 @@ import web.club_community.domain.Member;
 import web.club_community.exception.runtime.DuplicateEmailException;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @Transactional
@@ -56,11 +57,12 @@ public class MemberService implements UserDetailsService {
         return memberRepository.save(member);
     }
 
-    public UserDetails loginMember(MemberLoginRequest request) {
-        UserDetails user = loadUserByUsername(request.getEmail());
-        if (!user.getPassword().equals(request.getPassword())) {
+    public Member loginMember(MemberLoginRequest request) {
+        Member member = memberRepository.findById(request.getEmail())
+                .orElseThrow(() -> new NoSuchElementException("입력된 정보가 잘못 되었습니다."));
+        if (!member.getPassword().equals(request.getPassword())) {
             throw new IllegalArgumentException("입력된 정보가 잘못 되었습니다.");
         }
-        return user;
+        return member;
     }
 }

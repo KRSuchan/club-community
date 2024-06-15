@@ -21,9 +21,17 @@ public class ClubApplication {
     private String name;
     @OneToOne
     private Member applier;
-    @Column(name = "CREATE_TIME", nullable = false)
-    private LocalDateTime createTime;
 
+    @Builder.Default
+    @Column(name = "CREATE_TIME", nullable = false)
+    private LocalDateTime createTime = LocalDateTime.now();
+
+    // 대표 사진
+    @Column(name = "FILE_PATH")
+    private String filePath;
+    @Column(name = "FILE_NAME")
+    private String fileName;
+    
     @Embedded
     private Professor professor;
 

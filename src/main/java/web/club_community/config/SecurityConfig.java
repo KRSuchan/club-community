@@ -19,13 +19,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorizeRequests) ->
                         authorizeRequests
-                                .requestMatchers("/api/member/signup").permitAll()
-                                .requestMatchers("/api/member/login").permitAll()
-                                .requestMatchers("/api/callback").permitAll()
-                                .requestMatchers("/api/login/kakao-uri").permitAll()
-                                .requestMatchers("/api/public/**").hasRole("member")
-                                .requestMatchers("/api/club/**").hasRole("member")
-                                .requestMatchers("/api/admin/**").hasRole("admin")
+                                .requestMatchers("/api/**").permitAll()
                                 .anyRequest().authenticated())
                 .formLogin(AbstractHttpConfigurer::disable);
         return http.build();

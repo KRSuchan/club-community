@@ -8,13 +8,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import web.club_community.exception.runtime.DuplicateEmailException;
 
+import javax.naming.AuthenticationException;
 import java.util.Locale;
+import java.util.NoSuchElementException;
 
 @Slf4j
-@RestController
+@RestControllerAdvice
 public class ApiExceptionController {
     private final MessageSource messageSource;
 
@@ -36,6 +38,22 @@ public class ApiExceptionController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiErrorResponse> illegalExHandler(IllegalArgumentException e) {
+        ErrorCode errorCode = ErrorCode.BAD_REQUEST;
+        ApiErrorResponse errorResponse = ApiErrorResponse.of(errorCode, e.getMessage());
+        return ResponseEntity.status(errorCode.getCode()).body(errorResponse);
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ApiErrorResponse> AuthenticationExHandler(AuthenticationException e) {
+        ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
+        ApiErrorResponse errorResponse = ApiErrorResponse.of(errorCode, e.getMessage());
+        return ResponseEntity.status(errorCode.getCode()).body(errorResponse);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<ApiErrorResponse> NoSuchElementExHandler(NoSuchElementException e) {
         ErrorCode errorCode = ErrorCode.BAD_REQUEST;
         ApiErrorResponse errorResponse = ApiErrorResponse.of(errorCode, e.getMessage());
         return ResponseEntity.status(errorCode.getCode()).body(errorResponse);
