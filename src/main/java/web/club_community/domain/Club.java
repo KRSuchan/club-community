@@ -1,15 +1,13 @@
 package web.club_community.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@Setter
 @Builder
 @Entity
 @AllArgsConstructor
@@ -20,14 +18,18 @@ public class Club {
     private Integer id;
     @Column(name = "NAME", nullable = false)
     private String name;
+    @Builder.Default
     @Column(name = "INTRODUCTION", nullable = false)
-    private String introduction;
+    private String introduction = "동아리 소개를 입력하세요.";
+    @Builder.Default
     @Column(name = "HISTORY", nullable = false)
-    private String history;
-    @Column(name = "MEETING_TIME")
-    private String meetingTime;
+    private String history = "동아리 연혁을 입력하세요.";
+    @Builder.Default
+    @Column(name = "MEETING_TIME", nullable = false)
+    private String meetingTime = "정기모임 시간을 입력하세요.";
     @Column(name = "CLUB_TYPE")
     private ClubType clubType;
+
     @Embedded
     private Professor professor;
     // 대표 사진

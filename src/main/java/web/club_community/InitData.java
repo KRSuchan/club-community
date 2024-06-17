@@ -262,12 +262,12 @@ public class InitData {
                     .build();
 
             club = clubRepository.save(club);
-
-            ClubMember clubMember = ClubMember.builder()
-                    .member(master)
-                    .club(club)
-                    .build();
-            clubMemberRepository.save(clubMember);
+//            동아리장을 동아리부원에 넣는 로직 제외
+//            ClubMember clubMember = ClubMember.builder()
+//                    .member(master)
+//                    .club(club)
+//                    .build();
+//            clubMemberRepository.save(clubMember);
             return club;
         }
 

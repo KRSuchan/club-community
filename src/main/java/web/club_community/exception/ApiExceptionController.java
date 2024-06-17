@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import web.club_community.exception.runtime.DuplicateEmailException;
+import web.club_community.exception.runtime.SessionNotFoundException;
 
 import javax.naming.AuthenticationException;
 import java.util.Locale;
@@ -39,6 +40,14 @@ public class ApiExceptionController {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiErrorResponse> illegalExHandler(IllegalArgumentException e) {
         ErrorCode errorCode = ErrorCode.BAD_REQUEST;
+        ApiErrorResponse errorResponse = ApiErrorResponse.of(errorCode, e.getMessage());
+        return ResponseEntity.status(errorCode.getCode()).body(errorResponse);
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(SessionNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> SessionNotFoundExHandler(SessionNotFoundException e) {
+        ErrorCode errorCode = ErrorCode.FORBIDDEN;
         ApiErrorResponse errorResponse = ApiErrorResponse.of(errorCode, e.getMessage());
         return ResponseEntity.status(errorCode.getCode()).body(errorResponse);
     }

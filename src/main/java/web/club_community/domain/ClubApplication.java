@@ -1,14 +1,12 @@
 package web.club_community.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @Builder
 @Entity
 @AllArgsConstructor
@@ -21,6 +19,8 @@ public class ClubApplication {
     private String name;
     @OneToOne
     private Member applier;
+    @Column(name = "CLUB_TYPE", nullable = false)
+    private ClubType clubType;
 
     @Builder.Default
     @Column(name = "CREATE_TIME", nullable = false)
@@ -31,7 +31,7 @@ public class ClubApplication {
     private String filePath;
     @Column(name = "FILE_NAME")
     private String fileName;
-    
+
     @Embedded
     private Professor professor;
 

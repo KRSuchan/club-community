@@ -1,4 +1,4 @@
-package web.club_community.post.application.club.dto;
+package web.club_community.application.club.dto;
 
 import lombok.Builder;
 import lombok.Data;

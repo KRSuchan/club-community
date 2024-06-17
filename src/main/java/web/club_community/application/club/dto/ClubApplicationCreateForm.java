@@ -1,4 +1,4 @@
-package web.club_community.post.application.club.dto;
+package web.club_community.application.club.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -11,12 +11,6 @@ import web.club_community.domain.Professor;
 public class ClubApplicationCreateForm {
     @NotNull
     private String name;
-    @NotNull
-    private String introduction;
-    @NotNull
-    private String history;
-    @NotNull
-    private String meetingTime;
     @NotNull
     private ClubType clubType;
     //    prof_name : String

@@ -1,4 +1,4 @@
-package web.club_community.post.application.clubMember;
+package web.club_community.application.clubMember;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

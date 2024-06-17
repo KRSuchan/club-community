@@ -1,4 +1,4 @@
-package web.club_community.post.application.clubMember;
+package web.club_community.application.clubMember;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import web.club_community.domain.ClubMemberApplication;
