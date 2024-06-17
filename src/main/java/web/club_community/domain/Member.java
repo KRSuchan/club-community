@@ -46,10 +46,10 @@ public class Member {
     @Builder.Default
     private List<String> roles = new ArrayList<>();
 
-    @OneToOne(mappedBy = "master", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "master", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Club club;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ClubMember> clubMembers = new ArrayList<>();
 
 }

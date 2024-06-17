@@ -47,4 +47,7 @@ public class Club {
     @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
     private List<ClubMember> clubMembers = new ArrayList<>();
 
+    // 입부 신청
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
+    private List<ClubMemberApplication> applications = new ArrayList<>();
 }
