@@ -1,4 +1,4 @@
-package web.club_community.domain;
+package web.club_community.domain.notice;
 
 public enum NoticeType {
     ENTIRE, CLUB

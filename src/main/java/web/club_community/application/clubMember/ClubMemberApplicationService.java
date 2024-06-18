@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import web.club_community.Member.MemberRepository;
 import web.club_community.club.ClubRepository;
 import web.club_community.club.member.ClubMemberRepository;
 import web.club_community.domain.*;
@@ -25,6 +26,7 @@ public class ClubMemberApplicationService {
     private final ClubRepository clubRepository;
     private final FileRepository fileRepository;
     private final ClubMemberRepository clubMemberRepository;
+    private final MemberRepository memberRepository;
 
     private Club findClubById(Integer clubId) {
         return clubRepository.findById(clubId)
@@ -63,8 +65,10 @@ public class ClubMemberApplicationService {
         ClubMemberApplication application = findById(applicationId);
         Club club = application.getClub();
         Member applier = application.getMember();
+        applier.getRoles().add("clubMember");
         ClubMember clubMember = ClubMember.builder().club(club).member(applier).build();
         clubMemberRepository.save(clubMember);
+        memberRepository.save(applier);
         application.setStatus(ApplyStatus.ACCEPT);
         return applicationRepository.save(application);
     }

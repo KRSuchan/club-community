@@ -2,10 +2,7 @@ package web.club_community.domain.notice;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
@@ -29,11 +26,21 @@ public abstract class Notice {
     @Column(name = "CONTENTS", nullable = false)
     private String contents;
 
+    @Column(name = "NOTICE_TYPE", nullable = false)
+    private NoticeType noticeType;
+
+    // 파일 관리
+    @Column(name = "FILE_PATH")
+    private String filePath;
+    @Column(name = "FILE_NAME")
+    private String fileName;
+
+    @Builder.Default
     @Column(name = "CREATE_TIME", nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createdDate = LocalDateTime.now();
+    private LocalDateTime createdTime = LocalDateTime.now();
 
-    @Column(name = "UPDATE_TIME", nullable = false)
+    @Column(name = "UPDATE_TIME")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updatedTime = LocalDateTime.now();
 }

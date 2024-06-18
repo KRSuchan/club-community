@@ -13,7 +13,10 @@ public class ClubDashboardResponse {
     private String history;
     private String imgPath;
     private String meetingTime;
-    private MasterResponse master;
+    private String applicationName;
+    private MemberResponse master;
+    private MemberResponse subMaster;
+    private MemberResponse affair; // 총무
 
     public static ClubDashboardResponse of(Club club) {
         return ClubDashboardResponse.builder()
@@ -23,6 +26,10 @@ public class ClubDashboardResponse {
                 .history(club.getHistory())
                 .imgPath(club.getFilePath())
                 .meetingTime(club.getMeetingTime())
-                .master(MasterResponse.of(club.getMaster())).build();
+                .applicationName(club.getApplicationName())
+                .master(MemberResponse.of(club.getMaster()))
+                .subMaster(club.getSubMaster() == null ? null : MemberResponse.of(club.getSubMaster()))
+                .affair(club.getAffair() == null ? null : MemberResponse.of(club.getAffair()))
+                .build();
     }
 }

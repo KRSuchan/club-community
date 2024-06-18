@@ -22,10 +22,11 @@ public class ClubPhoto {
     @Column(name = "TITLE", nullable = false)
     private String title;
 
+    @Builder.Default
     @Column(name = "CREATE_TIME", nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdDate = LocalDateTime.now();
-    @Column(name = "UPDATE_TIME", nullable = false)
+    @Column(name = "UPDATE_TIME")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateTime = LocalDateTime.now();
 

@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Builder
 @Entity
@@ -23,4 +26,8 @@ public class ClubMember {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "CLUB_ID", nullable = false)
     private Club club;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Builder.Default
+    private List<String> roles = new ArrayList<>();
 }

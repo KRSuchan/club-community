@@ -15,4 +15,7 @@ public class ClubUpdateForm {
     private String history;
     @NotNull
     private String meetingTime;
+    
+    private String subMasterEmail;
+    private String affairEmail;
 }

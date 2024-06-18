@@ -11,6 +11,7 @@ import web.club_community.club.ClubRepository;
 import web.club_community.club.member.ClubMemberRepository;
 import web.club_community.domain.*;
 import web.club_community.domain.notice.ClubNotice;
+import web.club_community.domain.notice.NoticeType;
 import web.club_community.domain.notice.PublicNotice;
 import web.club_community.post.notice.NoticeRepository;
 
@@ -81,7 +82,8 @@ public class InitData {
                     .title(title)
                     .contents(contents)
                     .club(club)
-                    .createdDate(now)
+                    .noticeType(NoticeType.CLUB)
+                    .createdTime(now)
                     .updatedTime(now)
                     .build();
             noticeRepository.save(notice);
@@ -92,7 +94,8 @@ public class InitData {
             PublicNotice notice = PublicNotice.builder()
                     .title(title)
                     .contents(contents)
-                    .createdDate(now)
+                    .createdTime(now)
+                    .noticeType(NoticeType.ENTIRE)
                     .updatedTime(now)
                     .build();
             noticeRepository.save(notice);
@@ -108,6 +111,7 @@ public class InitData {
                     clubMembers.add(ClubMember.builder()
                             .club(centralClubs.get(i))
                             .member(members.get(j))
+                            .roles(List.of("member"))
                             .build());
                 }
                 clubMemberRepository.saveAll(clubMembers);
@@ -119,6 +123,7 @@ public class InitData {
                     clubMembers.add(ClubMember.builder()
                             .club(departmentClubs.get(i))
                             .member(members.get(j))
+                            .roles(List.of("member"))
                             .build());
                 }
                 clubMemberRepository.saveAll(clubMembers);
@@ -263,11 +268,11 @@ public class InitData {
 
             club = clubRepository.save(club);
 //            동아리장을 동아리부원에 넣는 로직 제외
-//            ClubMember clubMember = ClubMember.builder()
-//                    .member(master)
-//                    .club(club)
-//                    .build();
-//            clubMemberRepository.save(clubMember);
+            ClubMember clubMember = ClubMember.builder()
+                    .member(master)
+                    .club(club)
+                    .build();
+            clubMemberRepository.save(clubMember);
             return club;
         }
 
@@ -276,18 +281,23 @@ public class InitData {
             // 시스템 관리자 계정 1개 생성
             initMember("admin@email.com", "admin", "시스템 관리자",
                     LocalDate.of(1999, 1, 1), Gender.MALE, "컴퓨터소프트웨어공학과",
-                    20180901, "+82 10-0000-0000", List.of("member", "master", "admin"));
+                    20180901, "+82 10-0000-0000", List.of("clubMember", "master", "admin"));
             // 동아리장 계정 10개 생성
             for (int i = 1; i <= 10; i++) {
                 masters.add(initMember("master" + i + "@email.com", "master" + i, "동아리장" + i,
                         LocalDate.of(2000, 1, 1), Gender.FEMALE, "컴퓨터소프트웨어공학과",
-                        20190901 + i, i < 10 ? "+82 10-1111-112" + i : "+82 10-1111-11" + i, List.of("member", "master")));
+                        20190901 + i, i < 10 ? "+82 10-1111-112" + i : "+82 10-1111-11" + i, List.of("clubMember", "master")));
             }
             // 일반 회원 계정 60개 생성
-            for (int i = 1; i <= 60; i++) {
+            for (int i = 1; i <= 10; i++) {
                 members.add(initMember("user" + i + "@email.com", "user" + i, "일반유저" + i,
                         LocalDate.of(2001, 1, 1), Gender.MALE, "컴퓨터공학과",
-                        20200901 + i, i < 10 ? "+82 10-1111-111" + i : "+82 10-1111-11" + i, List.of("member")));
+                        20200901 + i, i < 10 ? "+82 10-1111-111" + i : "+82 10-1111-11" + i, List.of()));
+            }
+            for (int i = 11; i <= 60; i++) {
+                members.add(initMember("user" + i + "@email.com", "user" + i, "일반유저" + i,
+                        LocalDate.of(2001, 1, 1), Gender.MALE, "컴퓨터공학과",
+                        20200901 + i, "+82 10-1111-11" + i, List.of("clubMember")));
             }
         }
 

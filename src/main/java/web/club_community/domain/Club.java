@@ -38,10 +38,24 @@ public class Club {
     @Column(name = "FILE_NAME")
     private String fileName;
 
+    // 입부 신청서
+    @Column(name = "APPLICATION_PATH")
+    private String applicationPath;
+    @Column(name = "APPLICATION_NAME")
+    private String applicationName;
+
     // 마스터 관리자
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MASTER", nullable = false)
     private Member master;
+    // 부마스터
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "SUB_MASTER")
+    private Member subMaster;
+    // 총무
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "AFFAIR")
+    private Member affair;
 
     // 동아리 부원
     @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)

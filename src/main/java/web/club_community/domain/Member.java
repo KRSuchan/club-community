@@ -48,6 +48,10 @@ public class Member {
 
     @OneToOne(mappedBy = "master", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Club club;
+    @OneToOne(mappedBy = "subMaster", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Club clubAsSubMaster;
+    @OneToOne(mappedBy = "affair", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Club clubAsAffair;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ClubMember> clubMembers = new ArrayList<>();

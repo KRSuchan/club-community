@@ -10,10 +10,7 @@ import web.club_community.application.club.dto.ClubApplicationCreateForm;
 import web.club_community.application.club.dto.RejectApplicationRequest;
 import web.club_community.club.ClubRepository;
 import web.club_community.club.member.ClubMemberRepository;
-import web.club_community.domain.ApplyStatus;
-import web.club_community.domain.Club;
-import web.club_community.domain.ClubApplication;
-import web.club_community.domain.Member;
+import web.club_community.domain.*;
 import web.club_community.exception.runtime.AlreadyProcessedException;
 import web.club_community.file.FileProperty;
 import web.club_community.file.FilePropertyUtil;
@@ -85,9 +82,9 @@ public class ClubApplicationService {
         // 동아리장 회원 추가를 위한 생성한 동아리 우선 등록
         newClub = clubRepository.save(newClub);
 //        동아리장을 동아리 부원에 넣는 로직 삭제
-//        // 동아리장 추가
-//        ClubMember clubMember = ClubMember.builder().club(newClub).member(newMaster).build();
-//        clubMemberRepository.save(clubMember);
+        // 동아리장 추가
+        ClubMember clubMember = ClubMember.builder().club(newClub).member(newMaster).build();
+        clubMemberRepository.save(clubMember);
         // 동아리장인 권한 추가
         newMaster.getRoles().add("master");
         memberRepository.save(newMaster);
