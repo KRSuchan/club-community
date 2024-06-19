@@ -70,12 +70,14 @@ public class ClubMemberApplicationService {
         clubMemberRepository.save(clubMember);
         memberRepository.save(applier);
         application.setStatus(ApplyStatus.ACCEPT);
-        return applicationRepository.save(application);
+        applicationRepository.delete(application);
+        return application;
     }
 
     public ClubMemberApplication rejectApplication(Integer applicationId) {
         ClubMemberApplication application = findById(applicationId);
         application.setStatus(ApplyStatus.REJECT);
-        return applicationRepository.save(application);
+        applicationRepository.delete(application);
+        return application;
     }
 }
