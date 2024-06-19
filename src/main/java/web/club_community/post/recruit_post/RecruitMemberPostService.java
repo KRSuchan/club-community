@@ -41,18 +41,24 @@ public class RecruitMemberPostService {
     }
 
     public RecruitMemberPost createPost(PostCreateRequest form, Member writer, MultipartFile photoFile) {
-        FileProperty fileProperty = filePropertyUtil.createFileProperty(photoFile);
+        String fileName = null;
+        String filePath = null;
+        if (photoFile != null && !photoFile.isEmpty()) {
+            FileProperty fileProperty = filePropertyUtil.createFileProperty(photoFile);
+            fileName = fileProperty.getUploadFileName();
+            filePath = fileProperty.getFilePath();
+            // 파일 저장
+            fileRepository.save(fileProperty, photoFile);
+        }
         Club club = clubRepository.findByMaster(writer)
                 .orElseThrow(() -> new NoSuchElementException("동아리장인 동아리가 조회되지 않았습니다."));
         RecruitMemberPost recruitMemberPost = RecruitMemberPost.builder()
                 .title(form.getTitle())
                 .contents(form.getContent())
                 .club(club)
-                .fileName(fileProperty.getUploadFileName())
-                .filePath(fileProperty.getFilePath())
+                .fileName(fileName)
+                .filePath(filePath)
                 .build();
-        // 파일 저장
-        fileRepository.save(fileProperty, photoFile);
         return recruitMemberPostRepository.save(recruitMemberPost);
     }
 }

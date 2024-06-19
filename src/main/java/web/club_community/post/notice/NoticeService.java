@@ -65,16 +65,23 @@ public class NoticeService {
     }
 
     public Notice createNotice(NoticeCreateRequest notice, Member member, MultipartFile photoFile) throws AuthenticationException {
-        FileProperty fileProperty = filePropertyUtil.createFileProperty(photoFile);
+        String fileName = null;
+        String filePath = null;
+        if (photoFile != null && !photoFile.isEmpty()) {
+            System.out.println("photoFile!");
+            FileProperty fileProperty = filePropertyUtil.createFileProperty(photoFile);
+            fileName = fileProperty.getUploadFileName();
+            filePath = fileProperty.getFilePath();
+            // 파일 저장
+            fileRepository.save(fileProperty, photoFile);
+        }
         if (member.getRoles().contains("admin")) {
             PublicNotice publicNotice = PublicNotice.builder()
                     .title(notice.getTitle())
                     .contents(notice.getContent())
-                    .fileName(fileProperty.getUploadFileName())
-                    .filePath(fileProperty.getFilePath())
+                    .fileName(fileName)
+                    .filePath(filePath)
                     .noticeType(NoticeType.ENTIRE).build();
-            // 파일 저장
-            fileRepository.save(fileProperty, photoFile);
             return publicNoticeRepository.save(publicNotice);
         } else {
             Club club = clubRepository.findByMaster(member)
@@ -83,12 +90,10 @@ public class NoticeService {
                     .title(notice.getTitle())
                     .contents(notice.getContent())
                     .noticeType(NoticeType.ENTIRE)
-                    .fileName(fileProperty.getUploadFileName())
-                    .filePath(fileProperty.getFilePath())
+                    .fileName(fileName)
+                    .filePath(filePath)
                     .club(club)
                     .build();
-            // 파일 저장
-            fileRepository.save(fileProperty, photoFile);
             return clubNoticeRepository.save(clubNotice);
         }
     }

@@ -24,7 +24,6 @@ public class FilePropertyUtil {
     public FileProperty createFileProperty(MultipartFile multipartFile) {
         String uploadedFileName = multipartFile.getOriginalFilename();
         String storedFileName = createStoredFileName(uploadedFileName);
-
         FileProperty fileProperty = FileProperty.builder()
                 .uploadFileName(uploadedFileName)
                 .storedFileName(storedFileName)
@@ -34,6 +33,7 @@ public class FilePropertyUtil {
                 .contentType(multipartFile.getContentType())
                 .uploadTime(LocalDateTime.now())
                 .build();
+        System.out.println("createdFileProperty");
         return fileProperty;
     }
 
