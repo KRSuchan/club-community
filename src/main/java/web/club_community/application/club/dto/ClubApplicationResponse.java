@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Data
 public class ClubApplicationResponse {
     private Integer clubId;
+    private String clubName;
     private ApplyStatus applyStatus;
     private String reason;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -20,6 +21,7 @@ public class ClubApplicationResponse {
     public static ClubApplicationResponse of(ClubApplication clubApplication) {
         return ClubApplicationResponse.builder()
                 .clubId(clubApplication.getId())
+                .clubName(clubApplication.getName())
                 .applyStatus(clubApplication.getStatus())
                 .reason(clubApplication.getRejectReason())
                 .updateTime(LocalDateTime.now())

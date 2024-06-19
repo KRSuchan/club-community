@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import web.club_community.Member.MemberRepository;
+import web.club_community.Member.MemberService;
 import web.club_community.application.club.dto.ClubApplicationCreateForm;
 import web.club_community.application.club.dto.RejectApplicationRequest;
 import web.club_community.club.ClubRepository;
@@ -30,6 +31,7 @@ public class ClubApplicationService {
     private final ClubRepository clubRepository;
     private final MemberRepository memberRepository;
     private final ClubMemberRepository clubMemberRepository;
+    private final MemberService memberService;
 
     public ClubApplication save(ClubApplicationCreateForm form, Member applier, MultipartFile clubPicture) {
         FileProperty fileProperty = filePropertyUtil.createFileProperty(clubPicture);
@@ -97,5 +99,10 @@ public class ClubApplicationService {
         clubApplication.setStatus(ApplyStatus.REJECT);
         clubApplication.setRejectReason(request.getReason());
         return clubApplicationRepository.save(clubApplication);
+    }
+
+    public List<ClubApplication> findMyClubApplication(Member member) {
+        List<ClubApplication> myApplications = clubApplicationRepository.findClubApplicationsByApplier(member);
+        return myApplications;
     }
 }

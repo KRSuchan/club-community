@@ -107,4 +107,24 @@ public class ClubApplicationController {
         ClubApplicationResponse data = ClubApplicationResponse.of(application);
         return ResponseEntity.ok().body(data);
     }
+
+    // 내가 신청한 동아리 검토 상태 조회
+    @GetMapping("/my")
+    public ResponseEntity<List<ClubApplicationResponse>> getMyApplications(HttpServletRequest request) throws AuthenticationException {
+        log.info("request {}", request);
+        HttpSession session = request.getSession(false);
+        if (session == null) {
+            throw new SessionNotFoundException("세션이 만료되었습니다.");
+        }
+        Member loginMember = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
+        if (loginMember == null) {
+            throw new AuthenticationException("권한이 없습니다.");
+        }
+        List<ClubApplication> applications = clubApplicationService.findMyClubApplication(loginMember);
+        List<ClubApplicationResponse> data = applications
+                .stream()
+                .map(ClubApplicationResponse::of)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok().body(data);
+    }
 }
