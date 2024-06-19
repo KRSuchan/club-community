@@ -37,7 +37,7 @@ public class ClubApplicationController {
         if (session == null) {
             throw new SessionNotFoundException("세션이 만료되었습니다.");
         }
-        if (bindingResult.hasErrors() || mainPicture.isEmpty()) {
+        if (bindingResult.hasErrors() || mainPicture == null || mainPicture.isEmpty()) {
             throw new IllegalArgumentException("입력 정보가 잘못되었습니다.");
         }
         Member loginMember = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);

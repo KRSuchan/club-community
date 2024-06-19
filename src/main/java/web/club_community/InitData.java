@@ -3,18 +3,28 @@ package web.club_community;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import web.club_community.Member.MemberRepository;
+import web.club_community.application.club.ClubApplicationRepository;
+import web.club_community.application.clubMember.ClubMemberApplicationRepository;
 import web.club_community.club.ClubRepository;
 import web.club_community.club.member.ClubMemberRepository;
 import web.club_community.domain.*;
 import web.club_community.domain.notice.ClubNotice;
 import web.club_community.domain.notice.NoticeType;
 import web.club_community.domain.notice.PublicNotice;
+import web.club_community.post.clubPhoto.ClubPhotoRepository;
+import web.club_community.post.clubVideo.ClubVideoRepository;
 import web.club_community.post.notice.NoticeRepository;
+import web.club_community.post.recruit_post.RecruitMemberPostRepository;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -39,20 +49,157 @@ public class InitData {
         private final MemberRepository memberRepository;
         private final ClubMemberRepository clubMemberRepository;
         private final ClubRepository clubRepository;
+        private final ClubApplicationRepository clubApplicationRepository;
+        private final ClubMemberApplicationRepository clubMemberApplicationRepository;
         private final NoticeRepository noticeRepository;
+        private final ClubPhotoRepository clubPhotoRepository;
+        private final ClubVideoRepository clubVideoRepository;
+        private final RecruitMemberPostRepository recruitMemberPostRepository;
+
+        @Value("${file.root-path}")
+        private String FILE_ROOT_PATH;
+        @Value("${file.root-url}")
+        private String FILE_ROOT_URL;
+        private String AMU_PICTURE_URL = "https://item.kakaocdn.net/do/493188dee481260d5c89790036be0e66113e2bd2b7407c8202a97d2241a96625";
+        private String KYH_YOUTUBE_URL = "https://youtu.be/_HTj5b59Em0?si=n3iG4eBWpEomhl4s";
         private List<Member> masters = new ArrayList<>();
         private List<Member> members = new ArrayList<>();
         private List<Club> centralClubs = new ArrayList<>();
         private List<Club> departmentClubs = new ArrayList<>();
+        private Professor professorExample = Professor.builder()
+                .prof_name("김교수")
+                .prof_department("컴퓨터소프트웨어공학과")
+                .prof_phone_number("010-1234-5678").build();
 
         public void init() {
-            // 총 회원 71명 : 시스템 관리자 1명, 클럽장 10명, 클럽원 50명, 일반회원 10명
+            // 총 회원 71명 : 시스템 관리자 1명, 클럽장 10명, 클럽원 50명(11~60), 일반회원 10명(1~10)
             initMember();
             // 총 클럽 10개 : 중앙 클럽 5개, 학과 클럽 5개
             initClub();
+            // 10개의 동아리에 대해 11번째 회원부터 5명씩 동아리에 넣기
             initClubMember();
             // 총 공지 110개 : 전체 공지 10개 중앙 클럽 공지 10*5개, 학과 클럽 공지 10*5개
             initNotice();
+            // 동아리 등록 신청 5개, 일반회원 6 ~ 10번
+            initClubApplication();
+            // 동아리 입부 신청 3개씩
+            initClubMemberApplication();
+            // 동아리의 활동 사진 하나씩
+            initClubPhoto();
+            // 동아리의 활동 영상 하나씩
+            initClubVideo();
+            // 동아리의 부원 모집 게시글 3개씩
+            initRecruitPost();
+        }
+
+        private void initRecruitPost() {
+            for (int i = 0; i < 5; i++) {
+                Club central = centralClubs.get(i);
+                Club department = departmentClubs.get(i);
+                initRecruitPost("[" + central.getName() + "] 에서 부원 모집합니다!!!!!", "관심있으신분은 당장 신청하세요!", central);
+                initRecruitPost("[" + department.getName() + "] 에서 부원 모집합니다@@@@@@@", "우리. 너. 필요. 하다.", department);
+            }
+        }
+
+        private void initRecruitPost(String title, String content, Club club) {
+            RecruitMemberPost recruitMemberPost = RecruitMemberPost.builder()
+                    .title(title)
+                    .contents(content)
+                    .club(club)
+                    .fileName(null)
+                    .filePath(null)
+                    .build();
+            recruitMemberPostRepository.save(recruitMemberPost);
+        }
+
+        private void initClubVideo() {
+            for (int i = 0; i < 5; i++) {
+                initClubVideo("[" + centralClubs.get(i).getName() + "] 동아리 활동 영상", KYH_YOUTUBE_URL);
+                initClubVideo("[" + departmentClubs.get(i).getName() + "] 동아리 활동 영상", KYH_YOUTUBE_URL);
+            }
+        }
+
+        private void initClubVideo(String title, String url) {
+            ClubVideo recruitMemberPost = ClubVideo.builder()
+                    .title(title)
+                    .url(url)
+                    .build();
+            clubVideoRepository.save(recruitMemberPost);
+        }
+
+        private void initClubPhoto() {
+            for (int i = 0; i < 5; i++) {
+                initClubPhoto("[" + centralClubs.get(i).getName() + "] 동아리 활동 사진");
+                initClubPhoto("[" + departmentClubs.get(i).getName() + "] 동아리 활동 사진");
+            }
+        }
+
+        private void initClubPhoto(String title) {
+            ClubPhoto clubPhoto = ClubPhoto.builder()
+                    .title(title)
+                    .fileName("인터넷에서_가져온_사진.jpg")
+                    .filePath(AMU_PICTURE_URL)
+                    .build();
+            clubPhotoRepository.save(clubPhoto);
+        }
+
+        private void initClubMemberApplication() {
+            String fileName = "지원서.txt";
+            String filePath = FILE_ROOT_PATH + "/" + fileName;
+            write(fileName, "아무개");
+            for (int i = 0; i < 5; i++) {
+                Club tempClub = centralClubs.get(i);
+                for (int j = 6; j <= 10; j++) {
+                    initClubMemberApplication(tempClub, members.get(j), fileName, filePath);
+                }
+            }
+        }
+
+        private void initClubMemberApplication(Club club, Member member, String fileName, String filePath) {
+            ClubMemberApplication application = ClubMemberApplication.builder()
+                    .club(club)
+                    .member(member)
+                    .status(ApplyStatus.PENDING)
+                    .fileName(fileName)
+                    .filePath(filePath)
+                    .build();
+            clubMemberApplicationRepository.save(application);
+        }
+
+        // 지원서.txt 파일 생성
+        private void write(String fileName, String content) {
+            File file = new File(FILE_ROOT_PATH, fileName);
+            try {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+                writer.write(content);
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        private void initClubApplication() {
+            //일반 회원 한명당 하나의 동아리 등록 신청 요청
+            for (int i = 6; i <= 10; i++) {
+                initClubApplication("신청동아리아무개" + i,
+                        members.get(i),
+                        "인터넷에서_가져온_사진.jpg",
+                        AMU_PICTURE_URL);
+            }
+        }
+
+        private void initClubApplication(String clubName, Member applier, String fileName, String filePath) {
+            ClubApplication clubApplication = ClubApplication.builder()
+                    .name(clubName)
+                    .applier(applier)
+                    .status(ApplyStatus.PENDING)
+                    .fileName(fileName)
+                    .filePath(filePath)
+                    .professor(professorExample)
+                    .clubType(ClubType.DEPARTMENT)
+                    .build();
+            // 동아리 지원서 저장
+            clubApplicationRepository.save(clubApplication);
         }
 
         private void initNotice() {
@@ -294,6 +441,7 @@ public class InitData {
                         LocalDate.of(2001, 1, 1), Gender.MALE, "컴퓨터공학과",
                         20200901 + i, i < 10 ? "+82 10-1111-111" + i : "+82 10-1111-11" + i, List.of()));
             }
+            // 일반회원 11번부터 60번까지는 동아리 회원임
             for (int i = 11; i <= 60; i++) {
                 members.add(initMember("user" + i + "@email.com", "user" + i, "일반유저" + i,
                         LocalDate.of(2001, 1, 1), Gender.MALE, "컴퓨터공학과",
